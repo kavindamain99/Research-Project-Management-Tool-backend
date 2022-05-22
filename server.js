@@ -7,7 +7,13 @@ app.use(express.json());
 
 app.use(cors());
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
+
+//routes
+const authRouter = require("./routes/auth/register");
+app.use("/api/auth", authRouter);
+const adminRouter = require("./routes/admin/userRouter");
+app.use("/api/admin", adminRouter);
 
 mongoose
   .connect(process.env.MONGO_URI, {
