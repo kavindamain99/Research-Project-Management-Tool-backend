@@ -16,9 +16,8 @@ const authorization = async (request, response, next) => {
 
     try {
         const payload = jwt.verify(token, process.env.JWT_SS);
-
         request.supervisor = { id : payload.id };
-        request.supervisorLogged = await Supervisor.findById(payload.id);
+        request.supervisorLogged = await Supervisor.find({ id : payload.id }, 'id -_id');
     }
     catch {
         response.send("Unauthorized user");

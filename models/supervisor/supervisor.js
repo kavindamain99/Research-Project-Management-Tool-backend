@@ -15,6 +15,7 @@ const supervisorSchema = new mongoose.Schema({
     },
     role : {
         type : String,
+        default : "supervisor",
         enum : ["supervisor", "co-supervisor"],
         required : true
     },
@@ -25,6 +26,10 @@ const supervisorSchema = new mongoose.Schema({
     password : {
         type : String,
         required : [true, "Password required"]
+    },
+    field : {
+        type : String,
+        enum : ["Artificial Intelligence", "Blockchain", "IoT"]
     },
     contactNumber : {
         type : String,
