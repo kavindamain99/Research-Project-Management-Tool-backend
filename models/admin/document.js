@@ -18,9 +18,12 @@ const documentSchema = new mongoose.Schema(
       type: "boolean",
       default: false,
     },
-    type: {
+    docType: {
       type: "string",
-      default: "document",
+    },
+    degree: {
+      type: "string",
+      default: "INFORMATION TECHNOLOGY",
     },
     document: {
       type: "string",

@@ -40,7 +40,7 @@ const deleteStudent = async (req, res) => {
     if (!student) {
       res.json({ msg: "Student Not Found" });
     } else {
-      res.json({ student });
+      res.json(student);
     }
   } catch (error) {
     res.send(error);

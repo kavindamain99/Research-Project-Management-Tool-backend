@@ -11,6 +11,9 @@ const insertMarkingSchema = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
+      docType: req.body.docType,
+      degree: req.body.degree,
+
       document: result.secure_url,
       cloudinary_id: result.public_id,
     });
@@ -32,6 +35,9 @@ const insertPresentation = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
+      docType: req.body.docType,
+      degree: req.body.degree,
+
       document: result.secure_url,
       cloudinary_id: result.public_id,
     });
@@ -53,6 +59,9 @@ const insertDocument = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
+      docType: req.body.docType,
+      degree: req.body.degree,
+
       document: result.secure_url,
       cloudinary_id: result.public_id,
     });
