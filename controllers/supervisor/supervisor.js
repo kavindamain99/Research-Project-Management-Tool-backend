@@ -1,12 +1,23 @@
 import Topic from '../../models/supervisor/topic.js';
-import Supervisor from '../../models/supervisor/supervisor.js';
+import Document from '../../models/supervisor/document.js';
 
 const topicById = async (request, response, next) => {
     const topicId = request.params.id;
+    const field = request.supervisor.field;
+    const filter = {
+        topicId : topicId,
+        field : field,
+    }
     try {
-        const topic = await Topic.findOne({ topicId : topicId });
-        request.topic = topic;
-        next();
+        const topic = await Topic.findOne(filter);
+        console.log(topic)
+        if(topic) {
+            request.topic = topic;
+            next();
+        }
+        else {
+            response.status(400).json({ message : "Topic could not be found", error : error });
+        }
     }
     catch(error) {
         response.status(400).json({ message : "Topic could not be found", error : error });
@@ -18,11 +29,9 @@ const getSingleTopic = async (request, response) => {
 };
 
 const getAllTopics = async (request, response) => {
-    const supervisorId = request.supervisorLogged[0].id;
     const state = request.params.state;
     try {
-        var field = await Supervisor.find({ id : supervisorId }, 'field');
-        field = field[0].field;
+        const field = request.supervisor.field;
 
         const filter = {
             field : field,
@@ -56,15 +65,43 @@ const getAllTopics = async (request, response) => {
 
 const updateState = async (request, response) => {
     const state = request.params.state;
-    const topic = request.topic;
-    topic.state = state;
-    const updatedTopic = new Topic(topic);
+    const evaluated = request.topic.evaluated;
+
+    if(state === "accepted" || state === "rejected") {
+        if(!evaluated) {
+            const topic = request.topic;
+            const supervisor = request.supervisor;
+    
+            topic.state = state;
+            topic.supervisorId = supervisor.id;
+            topic.supervisorName = supervisor.firstName + " " + supervisor.lastName;
+            topic.role = supervisor.role;
+    
+            const updatedTopic = new Topic(topic);
+            try {
+                await updatedTopic.save();
+                response.status(200).json({ message : "Update succesfull" });
+            }
+            catch(error) {
+                response.status(400).json({ message : "Update failed", error : error });
+            }
+        }
+        else {
+            response.status(400).json({ error : "Cannot change state after evaluation" });
+        }
+    }
+    else {
+        response.status(400).json({ error : "Invalid state" });
+    }
+};
+
+const getDocuments = async (_request, response) => {
     try {
-        await updatedTopic.save();
-        response.status(200).json({ message : "Update succesfull" });
+        const documents = await Document.find();
+        response.status(200).json(documents);
     }
     catch(error) {
-        response.state(400).json({ message : "Update failed", error : error });
+        response.status(400).json({ message : "Unable to fetch documents", error : error });
     }
 }
 
@@ -72,5 +109,6 @@ export {
     topicById,
     getSingleTopic,
     getAllTopics,
-    updateState
-}
+    updateState,
+    getDocuments
+};

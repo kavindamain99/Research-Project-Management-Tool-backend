@@ -2,37 +2,63 @@ import PanelMember from '../../models/panel member/panelMember.js';
 
 import jwt from 'jsonwebtoken'; 
 import bcrypt from 'bcrypt';
-import { v4 as uuid4 } from 'uuid';
 
 const saltRounds = 10;
 
 const signUp = async (request, response) => {
+    if(request.body.password.length < 8) {
+        return response.status(400).json({ error : "Password must have atleast 8 characters" });
+    }
+    if(request.body.password !== request.body.confirmPassword) {
+        return response.status(400).json({ error : "Password and confirm password doesn't match" });
+    }
+    delete request.body.confirmPassword;
     try {
         var newPanelMember = new PanelMember(request.body);
-        
-        const filter = { "email" : newPanelMember.email };
-        const exist = await PanelMember.findOne(filter);
+
+        const exist = await PanelMember.findOne({ "email" : newPanelMember.email });
 
         if(exist) {
-            response.status(422).json({ error : "This email has already been used" });
+            return response.status(422).json({ error : "This email has already been used" });
         }
         else {
-            const id = uuid4();
+            const lastPanelMember = await PanelMember.findOne().sort({ _id : -1 });
+            var id;
+            if(!lastPanelMember.id) {
+                id = "SVR0001"
+            }
+            else {
+                /**
+                 * Get the string without the SVR prefix
+                 * Get the numeric value of the id and add 1
+                 * Convert back to String
+                 */
+                id = String((parseInt(lastPanelMember.id.substring(3)) + 1));
+                /**
+                 * Add leading zeroes if necessary
+                 * Add SVR prefix
+                 */
+                id = "PMR" + id.padStart(4, '0');
+            }
+
             const hashedPassword = await bcrypt.hash(newPanelMember.password, saltRounds);
 
             newPanelMember.id = id;
             newPanelMember.password = hashedPassword;
 
-            await newPanelMember.save().then((data) => {
-                response.status(200).json({ message : "Signup succesfull" })
-            }).catch((error) => {
-                console.log(error);
-                response.status(400).json({ error : error.message, message : "Signup failed" });
-            });
+            try {
+                await newPanelMember.save();
+                return response.status(200).json({ message : "Signup succesfull" });
+            }
+            catch(error) {
+                const errorMessage = error.message.split(": ");
+                return response.status(400).json({ error : errorMessage[2] });
+            }
         }
     }
     catch(error) {
-        response.status(500).json({ error : error.message, message : "Internal erver error" });
+        console.log(error)
+        return response.status(500).json({ error : error.message, message : "Internal erver error" });
     }
 };
 
@@ -44,33 +70,32 @@ const signIn = async (request, response) => {
          * Check if this validation necessary
          */
         if(!email || !password) {
-            response.send("Email and password necessary");
+            return response.send("Email and password necessary");
         }
 
-        const filter = { email : email };
-        const panelMember = await PanelMember.findOne(filter);
+        const panelMember = await PanelMember.findOne({ email : email });
         
         if(panelMember) {
             if(await bcrypt.compare(password, panelMember.password)) {
                 const token = jwt.sign(
-                    { id : panelMember._id, role : "PANELMEMBER" },
-                    process.env.JWT_SS,
+                    { id : panelMember.id, role : "PANELMEMBER" },
+                    process.env.JWT_PMS,
                     {
-                        expiresIn : process.env.JWT_SS_LIFETIME
+                        expiresIn : process.env.JWT_PMS_LIFETIME
                     }
                 );
-                response.status(200).json({ token : token });
+                return response.status(200).json({ token : "Bearer " + token });
             }
             else {
-                response.status(401).error({ message : "Invalid email or password" });
+                return response.status(401).json({ error : "Invalid email or password" });
             }
         }
         else {
-            response.status(401).error({ message : "Invalid email or password" });
+            return response.status(401).json({ error : "Invalid email or password" });
         }
     }
     catch(error) {
-        response.status(500).json({ error : error.message, message : "Internal erver error" });
+        return response.status(500).json({ error : error.message, message : "Internal erver error" });
     }
 };
 

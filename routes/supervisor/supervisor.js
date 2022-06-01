@@ -1,6 +1,6 @@
 import express from 'express';
 
-import authorize from '../../helpers/supervisor/authorization.js'
+import { supervisorAuthorization } from '../../helpers/supervisor/authorization.js'
 
 import {
     signUp,
@@ -11,7 +11,8 @@ import {
     topicById,
     getSingleTopic,
     getAllTopics,
-    updateState
+    updateState,
+    getDocuments
 } from '../../controllers/supervisor/supervisor.js';
 
 const router = express.Router();
@@ -19,9 +20,12 @@ const router = express.Router();
 router.post('/supervisor/signup', signUp);
 router.post('/supervisor/signin', signIn);
 
-router.get('/supervisor/topic/:id', authorize, topicById, getSingleTopic);
-router.get('/supervisor/topics/:state', authorize, getAllTopics);
+router.get('/supervisor/topic/:id', supervisorAuthorization, topicById, getSingleTopic);
+router.get('/supervisor/topics/:state', supervisorAuthorization, getAllTopics);
 
-router.put('/supervisor/topic/:id/:state', authorize, topicById, updateState);
+//test
+router.get('/supervisor/documents', supervisorAuthorization, getDocuments);
+
+router.put('/supervisor/topic/:id/:state', supervisorAuthorization, topicById, updateState);
 
 export default router;
