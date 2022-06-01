@@ -61,6 +61,14 @@ const topicSchema = new mongoose.Schema({
     evaluation : {
         type : String,
         default : "Evaluation pending"
+    },
+    supervisor : {
+        type : Boolean,
+        default : false
+    },
+    coSupervisor : {
+        type : Boolean,
+        default : false
     }
 }, { timestamps : true });
 
