@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const topicSchema = new mongoose.Schema({
     topicId : {
         type : String,
-        required : true
+        default : "1234"
     },
     groupId : {
         type : String,
@@ -12,7 +12,9 @@ const topicSchema = new mongoose.Schema({
     field : {
         type : String,
         required : [true, "Field required"],
-        enum : ["Artificial Intelligence", "Blockchain", "IoT"]
+    },
+    studentId : {
+        type : String
     },
     topic : {
         type : String,
