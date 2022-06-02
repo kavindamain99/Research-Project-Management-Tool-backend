@@ -40,10 +40,6 @@ const userSchema = new mongoose.Schema({
     type: "string",
     required: [true, "Please enter a degree"],
   },
-  specilization: {
-    type: "string",
-    required: [true, "Please enter a degree specilization"],
-  },
 });
 
 //hashing password using acessing the mongoose cretae middleware

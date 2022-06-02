@@ -5,7 +5,7 @@ const insertSubmission = async (req, res) => {
     const submission = await Submission.create(req.body);
     res.send(submission);
   } catch (error) {
-    res.send(error);
+    res.json({ msg: error.message });
   }
 };
 
@@ -26,7 +26,7 @@ const updateSubmission = async (req, res) => {
 const deleteSubmission = async (req, res) => {
   const subId = req.params.id;
   try {
-    const submission = await User.findOneAndDelete({ _id: subId });
+    const submission = await Submission.findOneAndDelete({ _id: subId });
     if (!submission) {
       res.send({ msg: "submission Not Found" });
     } else {

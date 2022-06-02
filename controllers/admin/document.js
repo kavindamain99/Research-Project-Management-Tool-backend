@@ -11,7 +11,7 @@ const insertMarkingSchema = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
-      docType: req.body.docType,
+      docType: "marking",
       degree: req.body.degree,
 
       document: result.secure_url,
@@ -19,6 +19,7 @@ const insertMarkingSchema = async (req, res) => {
     });
 
     documentSaved = await document.save();
+
     res.json(documentSaved);
   } catch (error) {
     res.json(error);
@@ -35,7 +36,7 @@ const insertPresentation = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
-      docType: req.body.docType,
+      docType: "presentaion",
       degree: req.body.degree,
 
       document: result.secure_url,
@@ -59,7 +60,7 @@ const insertDocument = async (req, res) => {
       desc: req.body.desc,
       studentAllowed: req.body.studentAllowed,
       staffAllowed: req.body.staffAllowed,
-      docType: req.body.docType,
+      docType: "document",
       degree: req.body.degree,
 
       document: result.secure_url,
@@ -73,7 +74,31 @@ const insertDocument = async (req, res) => {
   }
 };
 
-const updateDocument = async (req, res) => {};
+const updateDocument = async (req, res) => {
+  const documentId = req.params.id;
+
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "document",
+    });
+    let document = new Document({
+      name: req.body.name,
+      desc: req.body.desc,
+      studentAllowed: req.body.studentAllowed,
+      staffAllowed: req.body.staffAllowed,
+      docType: "document",
+      degree: req.body.degree,
+
+      document: result.secure_url,
+      cloudinary_id: result.public_id,
+    });
+
+    documentSaved = await document.findeOneAndUpdate({ _id: documentId });
+    res.json(documentSaved);
+  } catch (error) {
+    res.json(error);
+  }
+};
 
 const deleteDocument = async (req, res) => {
   try {
@@ -100,7 +125,16 @@ const getDocument = async (req, res) => {
   }
 };
 
-const getDocuments = async (req, res) => {
+const getDocumentsST = async (req, res) => {
+  try {
+    const document = await Document.find({ studentAllowed: "true" });
+    res.json(document);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+const getDocumentAll = async (req, res) => {
   try {
     const document = await Document.find();
     res.json(document);
@@ -113,8 +147,9 @@ module.exports = {
   insertDocument,
   updateDocument,
   deleteDocument,
-  getDocuments,
+  getDocumentsST,
   getDocument,
   insertMarkingSchema,
   insertPresentation,
+  getDocumentAll,
 };

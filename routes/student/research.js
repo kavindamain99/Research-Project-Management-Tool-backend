@@ -9,10 +9,10 @@ const {
   getResearch,
 } = require("../../controllers/student/research");
 
-router.post("/insert/research", authenticate, insertResearch);
+router.post("/insert/research", insertResearch);
 router.delete("/delete/research/:id", authenticate, deleteResearch);
 router.put("/update/research/:id", authenticate, updateResearch);
-router.get("/get/research/:id", authenticate, getResearch);
-router.get("/get/research", authenticate, getResearch);
+router.get("/get/research/:id", getResearch);
+router.get("/get/research", getResearch);
 
 module.exports = router;

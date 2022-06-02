@@ -7,8 +7,6 @@ const groupSchema = new mongoose.Schema({
   },
   groupId: {
     type: "string",
-    unique: true,
-    default: "id",
   },
   student1: {
     type: "string",

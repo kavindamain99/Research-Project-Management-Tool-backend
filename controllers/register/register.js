@@ -25,11 +25,11 @@ const Login = async (req, res) => {
   const { studentId, password } = req.body;
 
   if (!studentId || !password) {
-    res.send("please provide a Student ID and password");
+    res.send({ msg: "please provide a Student ID and password" });
   }
   const user = await User.findOne({ studentId: studentId });
   if (!user) {
-    res.send("invalid Studen ID");
+    res.send({ msg: "invalid Studen ID" });
   } else {
     if (await bcrypt.compare(req.body.password, user.password)) {
       const token = jwt.sign(
@@ -46,7 +46,7 @@ const Login = async (req, res) => {
         token,
       });
     } else {
-      res.send("Invalid Password");
+      res.send({ msg: "Invalid Password" });
     }
   }
 };
@@ -72,6 +72,7 @@ const adminLogin = async (req, res) => {
 
       res.status(200).json({
         token,
+        user: user.getId(),
       });
     } else {
       res.send("Invalid Password");

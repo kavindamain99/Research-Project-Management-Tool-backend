@@ -12,10 +12,10 @@ const {
 
 const { insertGroup } = require("../../controllers/student/group");
 
-router.post("/insert/group", authenticate, insertGroup);
-router.delete("/delete/group/:id", authenticate, deleteGroup);
-router.put("/update/group/:id", authenticate, updateGroup);
-router.get("/get/group/:id", authenticate, getGroup);
-router.get("/get/group", authenticate, getGroups);
+router.post("/insert/group", insertGroup);
+router.delete("/delete/group/:id", deleteGroup);
+router.put("/update/group/:id", updateGroup);
+router.get("/get/group/:id", getGroup);
+router.get("/get/group", getGroups);
 
 module.exports = router;

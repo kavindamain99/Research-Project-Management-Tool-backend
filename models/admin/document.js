@@ -21,6 +21,7 @@ const documentSchema = new mongoose.Schema(
     docType: {
       type: "string",
     },
+
     degree: {
       type: "string",
       default: "INFORMATION TECHNOLOGY",

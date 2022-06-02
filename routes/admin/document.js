@@ -7,26 +7,32 @@ const {
   insertDocument,
   updateDocument,
   deleteDocument,
-  getDocuments,
+  getDocumentsST,
   getDocument,
   insertMarkingSchema,
   insertPresentation,
+  getDocumentAll,
 } = require("../../controllers/admin/document");
 
-router.post("/insert", authenticate, upload.single("document"), insertDocument);
+const { insertSubmission } = require("../../controllers/student/submission");
+
+router.post("/insert", upload.single("document"), insertDocument);
 router.post(
-  "/insert/schema",
-  authenticate,
+  "/student/insert/submission",
   upload.single("document"),
-  insertMarkingSchema
+  insertSubmission
 );
+
+router.post("/insert/schema", upload.single("document"), insertMarkingSchema);
 router.post(
   "/insert/presentation",
-  authenticate,
   upload.single("document"),
   insertPresentation
 );
-router.get("/get", authenticate, getDocuments);
-router.get("/get/:id", authenticate, getDocument);
-router.delete("/delete/:id", authenticate, deleteDocument);
+router.get("/get", getDocumentsST);
+router.get("/get/all", getDocumentAll);
+router.put("/update/:id", updateDocument);
+
+router.get("/get/:id", getDocument);
+router.delete("/delete/:id", deleteDocument);
 module.exports = router;

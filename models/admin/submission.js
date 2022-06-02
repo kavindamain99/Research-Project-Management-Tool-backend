@@ -17,6 +17,10 @@ const submissionSchema = new mongoose.Schema({
     type: "string",
     required: [true, "please provide a deadline"],
   },
+  degree: {
+    type: "string",
+    required: [true, "please provide a degree"],
+  },
 });
 
 module.exports = new mongoose.model("submission", submissionSchema);

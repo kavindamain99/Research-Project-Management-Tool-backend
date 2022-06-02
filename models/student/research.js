@@ -1,30 +1,78 @@
 const mongoose = require("mongoose");
 
-const researchSchema = new mongoose.Schema({
-  groupId: {
-    type: "string",
-    required: [true, "Group Id must be provided"],
+const topicSchema = new mongoose.Schema(
+  {
+    topicId: {
+      type: String,
+      default: "1234",
+    },
+    groupId: {
+      type: String,
+      required: [true, "Group id required"],
+    },
+    field: {
+      type: String,
+      required: [true, "Field required"],
+    },
+    studentId: {
+      type: String,
+    },
+    topic: {
+      type: String,
+      required: [true, "Topic required"],
+    },
+    description: {
+      type: String,
+      required: [true, "Description required"],
+    },
+    supervisorId: {
+      type: String,
+      required: true,
+      default: "Supervisor ID",
+    },
+    supervisorName: {
+      type: String,
+      required: true,
+      default: "Supervisor name",
+    },
+    role: {
+      type: String,
+      default: "Supervisor",
+      enum: ["Supervisor", "Co-supervisor"],
+    },
+    state: {
+      type: String,
+      default: "pending",
+      enum: ["accepted", "rejected", "pending"],
+    },
+    panelMemberId: {
+      type: String,
+      required: true,
+      default: "Panel member ID",
+    },
+    panelMemberName: {
+      type: String,
+      required: true,
+      default: "Panel member name",
+    },
+    evaluated: {
+      type: Boolean,
+      default: false,
+    },
+    evaluation: {
+      type: String,
+      default: "Evaluation pending",
+    },
+    supervisor: {
+      type: Boolean,
+      default: false,
+    },
+    coSupervisor: {
+      type: Boolean,
+      default: false,
+    },
   },
-  topic: {
-    type: "string",
-    required: [true, "Topic must be provided"],
-  },
-  researchfield: {
-    type: "string",
-    required: [true, " Research Field must be provided"],
-  },
-  supervisor: {
-    type: "string",
-    default: "member",
-  },
-  coSupervisor: {
-    type: "string",
-    default: "member",
-  },
-  status: {
-    type: "boolean",
-    default: true,
-  },
-});
+  { timestamps: true }
+);
 
-module.exports = new mongoose.model("research", researchSchema);
+module.exports = new mongoose.model("topic", topicSchema);

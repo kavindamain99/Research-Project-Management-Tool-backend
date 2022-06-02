@@ -27,7 +27,7 @@ const deleteGroup = async (req, res) => {
 
 const getGroups = async (req, res) => {
   try {
-    const group = await Group.find();
+    const group = await Group.find({ panelMember1: { $ne: "member" } });
     res.send(group);
   } catch (error) {
     res.send(error);

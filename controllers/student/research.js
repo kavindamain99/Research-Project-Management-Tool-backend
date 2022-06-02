@@ -49,7 +49,7 @@ const getResearchs = async (req, res) => {
 const getResearch = async (req, res) => {
   const researchId = req.params.id;
   try {
-    const research = await Research.findOne({ _id: researchId });
+    const research = await Research.findOne({ studentId: researchId });
     if (research) {
       res.json(research);
     } else {
