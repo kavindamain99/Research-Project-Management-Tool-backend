@@ -1,4 +1,5 @@
 const express = require("express");
+const expressValidator = require("express-validator");
 const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
@@ -7,6 +8,7 @@ app.use(express.json());
 const path = require("path");
 app.use(cors());
 const helmet = require("helmet");
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.setHeader("Cross-Origin-Resource-Policy", "same-site");
@@ -23,6 +25,8 @@ app.use(
   })
 );
 const port = process.env.PORT || 5000;
+
+app.use(expressValidator());
 
 //const directory = path.join(__dirname, "/uploads/document");
 app.use("/uploads", express.static(path.join(__dirname, "/uploads/document")));
@@ -47,6 +51,23 @@ app.use("/api/research", researchRouter);
 
 const graphRouter = require("./routes/admin/graph");
 app.use("/api/admin", graphRouter);
+
+// Supervisor routes
+const supervisorRoutes = require("./routes/supervisor/supervisor.js");
+app.use("/api", supervisorRoutes);
+
+// Panel member routes
+const panelMemberRoutes = require("./routes/panel member/panelMember.js");
+app.use("/api", panelMemberRoutes);
+
+// Database connection
+// mongoose.connect(process.env.MONGO_URI).then(() => {
+//   console.log("database connection established");
+// });
+
+// app.listen(port, () => {
+//   console.log(`listening on port ${port}`);
+// });
 
 mongoose
   .connect(process.env.MONGO_URI, {

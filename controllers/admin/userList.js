@@ -1,5 +1,5 @@
 const User = require("../../models/register/register");
-const Panel = require("../../models/panel member/panel");
+const Panel = require("../../models/panel member/panelMember");
 
 const getStudents = async (req, res) => {
   try {
