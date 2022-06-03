@@ -24,8 +24,8 @@ const signUp = async (request, response) => {
         else {
             const lastPanelMember = await PanelMember.findOne().sort({ _id : -1 });
             var id;
-            if(!lastPanelMember.id) {
-                id = "SVR0001"
+            if(lastPanelMember == null) {
+                id = "PMR0001"
             }
             else {
                 /**

@@ -37,7 +37,7 @@ const topicSchema = new mongoose.Schema({
     role : {
         type : String,
         default : "Supervisor",
-        enum : ["Supervisor", "Co-supervisor"]
+        enum : ["supervisor", "co-supervisor"]
     },
     state : {
         type : String,

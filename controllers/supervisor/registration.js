@@ -24,7 +24,7 @@ const signUp = async (request, response) => {
         else {
             const lastSupervisor = await Supervisor.findOne().sort({ _id : -1 });
             var id;
-            if(!lastSupervisor.id) {
+            if(lastSupervisor == null) {
                 id = "SVR0001"
             }
             else {

@@ -23,10 +23,10 @@ const panelMemberSchema = new mongoose.Schema({
         required : [true, "Password required"],
         minlength : [8, "Password must have atleast 8 characters"]
     },
-    faculty : {
+    degree : {
         type : String,
-        enum : ["Faculty of Information Technology", "Faculty of Engineering", "Faculty of Business"],
-        required : [true, "Please select a faculty"]
+        enum : ["computing", "engineering", "business"],
+        required : [true, "Please select a degree"]
     },
     contactNumber : {
         type : String,

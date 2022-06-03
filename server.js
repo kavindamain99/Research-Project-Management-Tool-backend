@@ -22,6 +22,7 @@ app.use('/api', supervisorRoutes);
 import panelMemberRoutes from './routes/panel member/panelMember.js';
 app.use('/api', panelMemberRoutes);
 
+// Database connection
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("database connection established");

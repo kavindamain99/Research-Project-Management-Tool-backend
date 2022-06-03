@@ -31,13 +31,12 @@ const supervisorSchema = new mongoose.Schema({
     },
     field : {
         type : String,
-        enum : ["Artificial Intelligence", "Blockchain", "IoT"],
         required : [true, "Please select a field"]
     },
-    faculty : {
+    degree : {
         type : String,
-        enum : ["Faculty of Information Technology", "Faculty of Engineering", "Faculty of Business"],
-        required : [true, "Please select a faculty"]
+        enum : ["computing", "engineering", "business"],
+        required : [true, "Please select a degree"]
     },
     contactNumber : {
         type : String,
