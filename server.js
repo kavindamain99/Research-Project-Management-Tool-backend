@@ -60,6 +60,10 @@ app.use("/api", supervisorRoutes);
 const panelMemberRoutes = require("./routes/panel member/panelMember.js");
 app.use("/api", panelMemberRoutes);
 
+app.use("/", (req, res) => {
+  res.json("Hello from Online research Tool");
+});
+
 // Database connection
 // mongoose.connect(process.env.MONGO_URI).then(() => {
 //   console.log("database connection established");
