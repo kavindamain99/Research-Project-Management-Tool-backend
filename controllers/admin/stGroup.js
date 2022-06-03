@@ -48,9 +48,24 @@ const getGroup = async (req, res) => {
   }
 };
 
+const getGroupHome = async (req, res) => {
+  const stId = req.params.id;
+  try {
+    const group = await Group.findOne({ student1: stId });
+    if (group) {
+      res.json(group);
+    } else {
+      res.json("group not found");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 module.exports = {
   deleteGroup,
   updateGroup,
   getGroup,
+  getGroupHome,
   getGroups,
 };

@@ -1,4 +1,5 @@
 const Research = require("../../models/student/research");
+const Result = require("../../models/student/result");
 
 const insertResearch = async (req, res) => {
   try {
@@ -60,10 +61,26 @@ const getResearch = async (req, res) => {
   }
 };
 
+const getResult = async (req, res) => {
+  const groupId = req.params.id;
+
+  try {
+    const result = await Result.find({ groupId: groupId });
+    if (result) {
+      res.json(result);
+    } else {
+      res.json("no result found");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 module.exports = {
   insertResearch,
   deleteResearch,
   updateResearch,
   getResearchs,
   getResearch,
+  getResult,
 };
